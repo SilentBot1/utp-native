@@ -15,9 +15,12 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
+      - run: sudo apt install -y musl
+        if: ${{ matrix.os == 'ubuntu-16.04' }}
       - run: npm run fetch-libutp
       - run: npm install
       - run: npm run prebuild
+      - run: npm run prebuild-musl
       - run: npm run prebuild-ia32
         if: ${{ matrix.os == 'windows-latest' }}
       - uses: actions/upload-artifact@v2
