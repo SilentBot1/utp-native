@@ -7,7 +7,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-18.04]
+        os: [windows-latest, macos-latest, ubuntu-20.04]
     runs-on: ${{ matrix.os }}
     name: Build
     steps:
@@ -16,14 +16,14 @@ jobs:
         with:
           node-version: 16.x
       - run: sudo apt install -y musl musl-tools
-        if: ${{ matrix.os == 'ubuntu-18.04' }}
+        if: ${{ matrix.os == 'ubuntu-20.04' }}
       - run: npm run fetch-libutp
       - run: npm install
       - run: npm run prebuild
       - run: npm run prebuild-ia32
         if: ${{ matrix.os == 'windows-latest' }}
       - run: npm run prebuild-musl
-        if: ${{ matrix.os == 'ubuntu-18.04' }}
+        if: ${{ matrix.os == 'ubuntu-20.04' }}
         env:
           CC: musl-gcc
           CXX: musl-gcc
@@ -60,7 +60,7 @@ jobs:
       - name: Compress builds
         run: |
           tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-windows-all.tar" --directory "prebuilds/windows-latest" .
-          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-linux-x86.tar" --directory "prebuilds/ubuntu-18.04" .
+          tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-linux-x86.tar" --directory "prebuilds/ubuntu-20.04" .
           tar --create --verbose --file="./${{ steps.get_version.outputs.VERSION }}-osx-x86.tar" --directory "prebuilds/macos-latest" .
       - name: Upload x86 build
         uses: actions/upload-release-asset@v1
